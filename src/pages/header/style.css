@@ -1,0 +1,33 @@
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #ecf0f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  padding: 3% 5%;
+  width: 40%;
+  height: 72%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  margin-left: 23vw;
+  margin-top: 10vh;
+}
+
+.register-now {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+
+.center-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
