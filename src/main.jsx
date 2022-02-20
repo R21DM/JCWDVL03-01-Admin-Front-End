@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import "./index.css";
 
 // pages
-import Login from "./pages/login/index";
+import Product from "./pages/product/index";
 import Home from "./pages/home/index";
 import Navbar from "./pages/header";
 import Footer from "./pages/footer";
@@ -13,7 +13,7 @@ function Main() {
     <div className="main-container">
       <Navbar />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/product" element={<Product />} />
         <Route path="/" element={<Home />} />
       </Routes>
       <Footer />

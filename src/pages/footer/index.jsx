@@ -10,11 +10,11 @@ function Footer(props) {
   return (
     <div>
       <footer id="footer">
-        <div class="footer-top">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-3 col-md-6">
-                <div class="footer-info">
+        <div className="footer-top">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-3 col-md-6">
+                <div className="footer-info">
                   <h3>Medicio</h3>
                   <p>
                     150 Patimura Street <br />
@@ -26,51 +26,53 @@ function Footer(props) {
                     <strong>Email:</strong> info@example.com
                     <br />
                   </p>
-                  <div class="social-links mt-3">
-                    <a href="#" class="twitter">
-                      <i class="bx bxl-twitter"></i>
+                  <div className="social-links mt-3">
+                    <a href="#" className="twitter">
+                      <i className="bx bxl-twitter"></i>
                     </a>
-                    <a href="#" class="facebook">
-                      <i class="bx bxl-facebook"></i>
+                    <a href="#" className="facebook">
+                      <i className="bx bxl-facebook"></i>
                     </a>
-                    <a href="#" class="instagram">
-                      <i class="bx bxl-instagram"></i>
+                    <a href="#" className="instagram">
+                      <i className="bx bxl-instagram"></i>
                     </a>
-                    <a href="#" class="google-plus">
-                      <i class="bx bxl-skype"></i>
+                    <a href="#" className="google-plus">
+                      <i className="bx bxl-skype"></i>
                     </a>
-                    <a href="#" class="linkedin">
-                      <i class="bx bxl-linkedin"></i>
+                    <a href="#" className="linkedin">
+                      <i className="bx bxl-linkedin"></i>
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-2 col-md-6 footer-links">
+              <div className="col-lg-2 col-md-6 footer-links">
                 <h4>Useful Links</h4>
                 <ul>
                   <li>
-                    <i class="bx bx-chevron-right"></i> <a href="#">Home</a>
+                    <i className="bx bx-chevron-right"></i> <a href="#">Home</a>
                   </li>
                   <li>
-                    <i class="bx bx-chevron-right"></i> <a href="#">About us</a>
+                    <i className="bx bx-chevron-right"></i>{" "}
+                    <a href="#">About us</a>
                   </li>
                   <li>
-                    <i class="bx bx-chevron-right"></i> <a href="#">Services</a>
+                    <i className="bx bx-chevron-right"></i>{" "}
+                    <a href="#">Services</a>
                   </li>
                   <li>
-                    <i class="bx bx-chevron-right"></i>
+                    <i className="bx bx-chevron-right"></i>
                     <a href="#">Terms of service</a>
                   </li>
                   <li>
-                    <i class="bx bx-chevron-right"></i>
+                    <i className="bx bx-chevron-right"></i>
                     <a href="#">Privacy policy</a>
                   </li>
                 </ul>
               </div>
 
               <div
-                class="col-lg-4 col-md-6 footer-newsletter"
+                className="col-lg-4 col-md-6 footer-newsletter"
                 style={{ marginLeft: "20vw" }}
               >
                 <h4>Our Newsletter</h4>
@@ -91,9 +93,9 @@ function Footer(props) {
       {/* <div id="preloader"></div> */}
       <a
         href="#"
-        class="back-to-top d-flex align-items-center justify-content-center"
+        className="back-to-top d-flex align-items-center justify-content-center"
       >
-        <i class="bi bi-arrow-up-short"></i>
+        <i className="bi bi-arrow-up-short"></i>
       </a>
     </div>
   );

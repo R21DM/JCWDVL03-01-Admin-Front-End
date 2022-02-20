@@ -1,33 +1,120 @@
-.login-container {
-  width: 100vw;
-  height: 100vh;
-  background-color: #ecf0f1;
+.nav {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  margin-right: 50px;
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  padding: 3% 5%;
-  width: 40%;
-  height: 72%;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  margin-left: 23vw;
-  margin-top: 10vh;
+.center {
+  margin-left: 40%;
 }
-
-.register-now {
-  font-size: 16px;
-  font-weight: normal;
-  margin-bottom: 15px;
-}
-
 .center-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.button {
+  margin-left: 25px;
+  color: white;
+  background-color: rgb(63, 187, 192);
+  border: 1;
+  border-radius: 7px;
+  border-color: rgb(63, 187, 192);
+}
+.button:hover {
+  margin-left: 25px;
+  color: rgb(63, 187, 192);
+  background-color: white;
+  border-radius: 7px;
+}
+.button-login:hover {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(63, 187, 192);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(63, 187, 192);
+}
+.button-login {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(82, 203, 207);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+
+.button-login:active {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(82, 203, 207);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+
+.button-login:disabled {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(82, 203, 207);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+.modal-header {
+  border-bottom: 0 none;
+}
+
+.modal-footer {
+  border-top: 0 none;
+}
+.form {
+  margin-left: 10%;
+  color: rgb(60, 175, 179);
+}
+.form-size {
+  width: 20vw;
+  height: auto;
+}
+@media only screen and (max-width: 600px) {
+  .modal-size {
+    width: 210px;
+    margin-left: 26vw;
+    height: auto;
+  }
+
+  .form-size {
+    width: 120px;
+    height: auto;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .modal-size {
+    width: 30vw;
+    margin-left: 36vw;
+    height: auto;
+  }
+}
+
+.title {
+  color: rgb(63, 187, 192);
+}
+
+.register {
+  margin-right: 16%;
+  color: rgb(63, 187, 192);
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #333;
+  border-color: #333;
 }

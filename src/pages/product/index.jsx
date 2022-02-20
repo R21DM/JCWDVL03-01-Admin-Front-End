@@ -6,7 +6,7 @@ import "./style.css";
 const API_URL = process.env.REACT_APP_API_URL;
 // const API_URL = "http://localhost:2000";
 
-function Login(props) {
+function Product(props) {
   // state
   const [username, setUserName] = useState("");
   const [password, setPassWord] = useState("");
@@ -33,7 +33,7 @@ function Login(props) {
         {/* --------------------------- Login  ------------------------------*/}
         <div className="login-container">
           <div class="container">
-            <div className="login-form">
+            {/* <div className="login-form">
               <h2 className="center-item">Sign In</h2>
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -81,7 +81,7 @@ function Login(props) {
                   )}
                 </Button>
               </Form>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>
@@ -89,4 +89,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default Product;
