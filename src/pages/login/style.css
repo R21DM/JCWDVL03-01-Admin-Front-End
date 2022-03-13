@@ -1,0 +1,263 @@
+.nav2 {
+  display: contents;
+}
+.nav-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 14%;
+}
+
+.nav-brand {
+  cursor: pointer;
+}
+
+.alert {
+  width: 81%;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.center-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: -9%;
+}
+.center-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.center-forgot {
+  margin-left: 25%;
+}
+.center-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  margin-left: 25px;
+  color: white;
+  background-color: rgb(63, 187, 192);
+  border: 1;
+  border-radius: 7px;
+  border-color: rgb(63, 187, 192);
+}
+
+.button-cancel {
+  margin-left: 17%;
+  margin-top: -15px;
+  width: 60%;
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+
+.button:hover {
+  margin-left: 25px;
+  color: rgb(63, 187, 192);
+  background-color: white;
+  border-color: turquoise;
+  border-radius: 7px;
+}
+.button-login:hover {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(63, 187, 192);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(63, 187, 192);
+}
+.button-login {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(82, 203, 207);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+
+.button-login:active {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(82, 203, 207);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+
+.button-login:disabled {
+  margin-left: 17%;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgb(82, 203, 207);
+  border: 1;
+  border-radius: 20px;
+  border-color: rgb(73, 195, 199);
+}
+
+.btn2 {
+  /* margin-left: 25px; */
+  color: white;
+  background-color: rgb(63, 187, 192);
+  border: 1;
+  border-radius: 7px;
+  border-color: rgb(63, 187, 192);
+}
+.btn2:hover {
+  /* margin-left: 25px; */
+  color: rgb(63, 187, 192);
+  background-color: white;
+  border-color: turquoise;
+  border-radius: 7px;
+}
+
+.modal-header {
+  border-bottom: 0 none;
+}
+
+.modal-footer {
+  border-top: 0 none;
+}
+.form {
+  margin-left: 10%;
+  color: rgb(60, 175, 179);
+}
+.form-size {
+  width: 20vw;
+  height: auto;
+}
+
+.logonya:hover {
+  cursor: pointer;
+}
+
+.header {
+  margin-top: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .modal-size {
+    width: 210px;
+    margin-left: 26vw;
+    height: auto;
+  }
+  .modal-size2 {
+    width: 210px;
+    margin-left: 26vw;
+    height: auto;
+  }
+
+  .form-size {
+    width: 120px;
+    height: auto;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .modal-size {
+    width: 30vw;
+    margin-left: 36vw;
+    height: auto;
+  }
+  .modal-size2 {
+    width: 30vw;
+    margin-left: 36vw;
+    height: auto;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .search {
+    width: 30vw;
+    margin-right: 2vw;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  .search {
+    width: 20vw;
+    margin-right: 2vw;
+  }
+}
+@media only screen and (max-width: 990px) {
+  .search {
+    width: 22vw;
+    margin-right: 2vw;
+    margin-left: 2vw;
+  }
+}
+@media only screen and (max-width: 840px) {
+  .search {
+    width: 30vw;
+    margin-right: 2vw;
+    margin-left: 3vw;
+  }
+}
+@media only screen and (max-width: 560px) {
+  .search {
+    width: 40vw;
+    margin-right: 2vw;
+  }
+}
+@media only screen and (max-width: 420px) {
+  .search {
+    width: 50vw;
+    margin-right: 2vw;
+  }
+}
+@media only screen and (max-width: 350px) {
+  .search {
+    width: 55vw;
+    margin-right: 2vw;
+  }
+}
+
+.title {
+  color: rgb(63, 187, 192);
+}
+
+.register {
+  margin-right: 16%;
+  color: rgb(63, 187, 192);
+}
+
+.register-now {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+.register-btn {
+  margin-left: 0.5vw;
+  color: white;
+  background-color: rgb(63, 187, 192);
+  border: 1;
+  border-radius: 7px;
+  border-color: rgb(63, 187, 192);
+}
+.register-btn:hover {
+  color: rgb(63, 187, 192);
+  background-color: white;
+  border-color: turquoise;
+  border-radius: 7px;
+}
+
+.forgetpw {
+  margin-right: 35%;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #333;
+  border-color: #333;
+}

@@ -1,0 +1,237 @@
+.button-type {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2%;
+}
+
+.center-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color {
+  background-color: rgb(236, 240, 241);
+}
+.product-container {
+  width: 100vw;
+  height: auto;
+  background-color: #ecf0f1;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.body-feature-product {
+  margin-left: 2%;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(236, 240, 241) !important;
+  background: none;
+}
+
+.filter {
+  width: auto;
+  height: 100vh;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: column;
+
+  border-style: solid;
+  border-width: 0.001px;
+  border-radius: 5px;
+  border-color: rgb(226, 225, 225);
+}
+
+.filter-header {
+  height: 7vh;
+
+  background-color: rgb(241, 241, 241);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.filter-header2 {
+  display: flex;
+  color: rgb(80, 78, 78);
+  flex-direction: column;
+  justify-content: center;
+}
+.filter-header3 {
+  margin-top: 5%;
+  display: flex;
+  color: rgb(80, 78, 78);
+  flex-direction: column;
+  justify-content: center;
+}
+
+.filter-header-color {
+  background-color: rgba(243, 242, 242, 0.904);
+  outline: 1px rgb(226, 225, 225) solid; /* inner stroke */
+}
+
+.form1 {
+  display: flex;
+  padding-left: 5%;
+  padding-right: 8%;
+  padding-top: 5%;
+}
+.form2 {
+  display: flex;
+  width: 75%;
+}
+
+.left1 {
+  margin-left: 10%;
+}
+.left2 {
+  margin-top: 10px;
+  margin-left: 10%;
+}
+.left3 {
+  margin-left: 10%;
+  margin-top: 10px;
+}
+
+.price-tag {
+  background-color: aliceblue;
+  display: flex;
+  padding-top: 4%;
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-left: -20%;
+  outline: rgb(238, 240, 241) auto 1px;
+}
+
+.title {
+  padding-top: 2%;
+  margin-bottom: 1%;
+}
+
+@media only screen and (max-width: 600px) {
+  #product-card {
+    width: 40%;
+    margin-left: 2%;
+    margin-right: 1%;
+    margin-bottom: 1%;
+  }
+}
+@media only screen and (min-width: 600px) {
+  #product-card {
+    width: 22%;
+    margin-right: 1%;
+    margin-bottom: 1%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+}
+@media only screen and (max-width: 690px) {
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media only screen and (max-width: 540px) {
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media only screen and (max-width: 360px) {
+  .filter,
+  .body-feature-product {
+    margin-top: 2%;
+    margin-left: 2%;
+  }
+
+  .body-feature-product {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
