@@ -46,7 +46,6 @@ function Header() {
     if (TOKEN) {
       setIsSignIn(true);
     }
-    
 
     script.src = "/assets/js/main.js";
     script.async = true;
@@ -183,6 +182,7 @@ function Header() {
                   {/* ------------------------------------- Navigate -------------------------------------*/}
                   <div style={{ display: "flex" }}>
                     <Nav.Link onClick={() => navigate("")}>Home</Nav.Link>
+                    <Nav.Link onClick={() => navigate("/user")}>User</Nav.Link>
                     <Nav.Link onClick={() => navigate("/product")}>
                       Products
                     </Nav.Link>
