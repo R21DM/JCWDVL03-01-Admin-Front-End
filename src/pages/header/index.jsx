@@ -183,6 +183,9 @@ function Header() {
                   <div style={{ display: "flex" }}>
                     <Nav.Link onClick={() => navigate("")}>Home</Nav.Link>
                     <Nav.Link onClick={() => navigate("/user")}>User</Nav.Link>
+                    <Nav.Link onClick={() => navigate("/transaction")}>
+                      Transactions
+                    </Nav.Link>
                     <Nav.Link onClick={() => navigate("/product")}>
                       Products
                     </Nav.Link>
