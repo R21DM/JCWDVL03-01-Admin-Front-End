@@ -29,7 +29,6 @@
   align-items: center;
   justify-content: center;
 }
-
 .card-body {
   display: flex;
   flex-direction: column;

@@ -102,7 +102,7 @@ function Login() {
           window.sessionStorage.setItem("key", respond.data.token_data);
         }
         console.log(user);
-        navigate("/");
+        navigate("../report");
       })
       .catch((error) => {
         setError(parseRes(error));

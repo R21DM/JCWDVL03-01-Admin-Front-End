@@ -168,7 +168,7 @@ function Header() {
               className="logonya"
               src="/assets/img/logo.png"
               alt=""
-              onClick={() => navigate("")}
+              onClick={() => navigate("/report")}
             />
           </div>
 
@@ -186,7 +186,10 @@ function Header() {
                 <div className="nav2">
                   {/* ------------------------------------- Navigate -------------------------------------*/}
                   <div style={{ display: "flex" }}>
-                    <Nav.Link onClick={() => navigate("")}>Home</Nav.Link>
+                    <Nav.Link onClick={() => navigate("/user")}>User</Nav.Link>
+                    <Nav.Link onClick={() => navigate("/transaction")}>
+                      Transactions
+                    </Nav.Link>
                     <Nav.Link onClick={() => navigate("/product")}>
                       Products
                     </Nav.Link>

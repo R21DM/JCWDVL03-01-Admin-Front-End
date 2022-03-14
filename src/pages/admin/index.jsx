@@ -8,6 +8,7 @@ function Admin(props) {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   useEffect(() => {
+    navigate("/report");
     const TOKEN = localStorage.getItem("token");
     const KEY = sessionStorage.getItem("key");
     if (!user.id) {
