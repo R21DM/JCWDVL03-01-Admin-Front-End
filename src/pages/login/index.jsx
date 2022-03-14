@@ -43,6 +43,12 @@ function Login() {
       navigate("/*");
       return;
     }
+    const KEY = sessionStorage.getItem("key");
+    if (KEY) {
+      setIsSignIn(true);
+      navigate("/*");
+      return;
+    }
     console.log(TOKEN);
 
     script.src = "/assets/js/main.js";
@@ -75,7 +81,9 @@ function Login() {
         console.log(respond.data);
 
         // save token or id in web storage
-        localStorage.setItem("token", respond.data.token_data);
+        if (keep) {
+          localStorage.setItem("token", respond.data.token_data);
+        }
         // data user dijadikan JWTToken, bisa diubah jadi userdata
 
         // save data to global storage
@@ -90,7 +98,8 @@ function Login() {
         setShow(false);
 
         if (!keep) {
-          window.onbeforeunload = localStorage.removeItem("token");
+          // window.onbeforeunload = localStorage.removeItem("token");
+          window.sessionStorage.setItem("key", respond.data.token_data);
         }
         console.log(user);
         navigate("/");

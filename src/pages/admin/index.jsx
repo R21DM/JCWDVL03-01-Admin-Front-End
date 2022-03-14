@@ -9,8 +9,9 @@ function Admin(props) {
   const user = useSelector((state) => state.user);
   useEffect(() => {
     const TOKEN = localStorage.getItem("token");
+    const KEY = sessionStorage.getItem("key");
     if (!user.id) {
-      if (TOKEN) {
+      if (TOKEN || KEY) {
         return;
       } else navigate("login");
     }

@@ -46,7 +46,10 @@ function Header() {
     if (TOKEN) {
       setIsSignIn(true);
     }
-    
+    const KEY = sessionStorage.getItem("key");
+    if (KEY) {
+      setIsSignIn(true);
+    }
 
     script.src = "/assets/js/main.js";
     script.async = true;
@@ -117,8 +120,9 @@ function Header() {
   };
   const onButtonUserConfirm = () => {
     setIsAdmin(false);
-    // clear local storage
+    // clear local storage & session storage
     localStorage.removeItem("token");
+    sessionStorage.removeItem("key");
 
     // clear global storage
     dispatch({ type: "LOGOUT" });
