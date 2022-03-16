@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Table } from "react-bootstrap";
+import { Button, Table, Pagination } from "react-bootstrap";
 import "./style.css";
 import Axios from "axios";
 
@@ -10,6 +10,10 @@ const API_URL = process.env.REACT_APP_API_URL;
 function User() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+
+  //Variable Names
+  const [page, setPage] = useState(1);
+  const [indexStartItem, setIndexStartItem] = useState(0);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -29,24 +33,53 @@ function User() {
     }
   }, []);
 
-  const renderAllUser = () => {
-    return data.map((val, idx) => {
-      const role = val.role === 2 ? "User" : "Admin";
-      const active = val.verified_user === 1 ? "Active" : "Not Active";
-      const register = val.create_at.slice(0, 10);
+  //Pagination control
+  const active = page;
+  const items = [];
+  const itemPerPage = 10;
+  const endPageNumber = Math.ceil(data.length / itemPerPage);
+  for (let number = 1; number <= endPageNumber; number++) {
+    items.push(
+      <Pagination.Item
+        onClick={() => setPage(number)}
+        key={number}
+        active={number === active}
+      >
+        {number}
+      </Pagination.Item>
+    );
+  }
 
-      return (
-        <tr key={val.id}>
-          <td>{idx + 1}</td>
-          <td>{val.username}</td>
-          <td>{role}</td>
-          <td>{val.email}</td>
-          <td>{val.phone}</td>
-          <td>{register}</td>
-          <td>{active}</td>
-        </tr>
-      );
-    });
+  useEffect(() => {
+    //Set pagination
+    const startIndex = 0 + itemPerPage * (page - 1);
+    setIndexStartItem(startIndex);
+
+    //Check page
+    console.log("current page:", page);
+  }, [page]);
+
+  const renderAllUser = () => {
+    return data
+      .slice(indexStartItem, indexStartItem + itemPerPage)
+      .map((val, idx) => {
+        const role = val.role === 2 ? "User" : "Admin";
+        const activeUser = val.verified_user === 1 ? "Active" : "Not Active";
+        const register = val.create_at.slice(0, 10);
+        const userNo = idx + 1 + itemPerPage * (page - 1);
+
+        return (
+          <tr key={userNo}>
+            <td>{userNo}</td>
+            <td>{val.username}</td>
+            <td>{role}</td>
+            <td>{val.email}</td>
+            <td>{val.phone}</td>
+            <td>{register}</td>
+            <td>{activeUser}</td>
+          </tr>
+        );
+      });
   };
 
   return (
@@ -66,6 +99,19 @@ function User() {
           </thead>
           <tbody>{renderAllUser()}</tbody>
         </Table>
+      </div>
+      <div className="d-flex justify-content-center py-2">
+        <Pagination>
+          <Pagination.Prev
+            disabled={page === 1 ? true : false}
+            onClick={() => setPage(page - 1)}
+          />
+          {items}
+          <Pagination.Next
+            disabled={page === endPageNumber ? true : false}
+            onClick={() => setPage(page + 1)}
+          />
+        </Pagination>
       </div>
     </div>
   );
