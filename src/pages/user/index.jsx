@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Table, Pagination } from "react-bootstrap";
+import { Form, Table, Pagination } from "react-bootstrap";
 import "./style.css";
 import Axios from "axios";
 
@@ -15,14 +15,21 @@ function User() {
   const [page, setPage] = useState(1);
   const [indexStartItem, setIndexStartItem] = useState(0);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState([]);
 
-  useEffect(() => {
+  //Get User Data
+  const getUserData = () => {
     Axios.get(API_URL + `/users/showAllUser`)
       .then((respond) => {
         console.log(respond.data);
         setData(respond.data);
       })
       .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    //Load user data
+    getUserData();
 
     const TOKEN = localStorage.getItem("token");
     const KEY = sessionStorage.getItem("key");
@@ -50,6 +57,36 @@ function User() {
     );
   }
 
+  //Radio Button Controller
+  const radios = [
+    { name: "Off", value: "0" },
+    { name: "On", value: "1" },
+  ];
+
+  //Active - Deactive User Handler
+  const changeUserActive = (id, state) => {
+    //Toggle loading
+    setLoading({ ...loading, [id]: true });
+
+    //Create user data
+    const status = state ? 1 : 0;
+    const userData = { id, status };
+
+    console.log(userData);
+
+    //POST to backend
+    Axios.post(API_URL + `/users/status`, userData)
+      .then((respond) => {
+        console.log(respond.data);
+        getUserData();
+        setLoading({ ...loading, [id]: false });
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading({ ...loading, [id]: false });
+      });
+  };
+
   useEffect(() => {
     //Set pagination
     const startIndex = 0 + itemPerPage * (page - 1);
@@ -64,19 +101,31 @@ function User() {
       .slice(indexStartItem, indexStartItem + itemPerPage)
       .map((val, idx) => {
         const role = val.role === 2 ? "User" : "Admin";
-        const activeUser = val.verified_user === 1 ? "Active" : "Not Active";
+        const activeUser = String(val.verified_user);
         const register = val.create_at.slice(0, 10);
         const userNo = idx + 1 + itemPerPage * (page - 1);
 
         return (
-          <tr key={userNo}>
+          <tr key={val.id}>
             <td>{userNo}</td>
             <td>{val.username}</td>
             <td>{role}</td>
             <td>{val.email}</td>
             <td>{val.phone}</td>
             <td>{register}</td>
-            <td>{activeUser}</td>
+            <td>
+              <Form className="center-item">
+                <Form.Check
+                  type="switch"
+                  disabled={loading[val.id]}
+                  id={val.id}
+                  checked={val.verified_user === 1}
+                  onChange={(e) =>
+                    changeUserActive(e.target.id, e.target.checked)
+                  }
+                />
+              </Form>
+            </td>
           </tr>
         );
       });

@@ -68,7 +68,7 @@ function Transaction() {
         const trxNo = idx + 1 + itemPerPage * (page - 1);
 
         return (
-          <tr key={trxNo}>
+          <tr key={val.id}>
             <td>{trxNo}</td>
             <td>{val.code}</td>
             <td>{val.username}</td>
