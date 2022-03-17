@@ -16,13 +16,19 @@ function Transaction() {
   const [indexStartItem, setIndexStartItem] = useState(0);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  //Get All Transactions Data
+  const getTxnAll = () => {
     Axios.get(API_URL + `/transaction`)
       .then((respond) => {
         console.log(respond.data);
         setData(respond.data);
       })
       .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    //Get all transactions data
+    getTxnAll();
 
     const TOKEN = localStorage.getItem("token");
     const KEY = sessionStorage.getItem("key");
@@ -76,6 +82,15 @@ function Transaction() {
             <td>{total_price}</td>
             <td>{order_date}</td>
             <td>{val.status}</td>
+            <td className="center-item">
+              <Button
+                id={val.id}
+                size="sm"
+                onClick={(e) => navigate(`${e.target.id}`)}
+              >
+                Details
+              </Button>
+            </td>
           </tr>
         );
       });
@@ -94,6 +109,7 @@ function Transaction() {
               <th>Total Price</th>
               <th>Order Date</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>{renderAllTrx()}</tbody>
