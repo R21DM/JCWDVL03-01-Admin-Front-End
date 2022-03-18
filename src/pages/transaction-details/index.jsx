@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Table, Image, Card, ButtonGroup } from "react-bootstrap";
+import { Button, Table, Image, Card, Modal, Badge } from "react-bootstrap";
 import "./style.css";
 import Axios from "axios";
 
@@ -19,8 +19,35 @@ function TransactionDetails() {
     price: 0,
     qty: 0,
     total_price: 0,
+    filename: "",
   });
   const [deliveryCost, setDeliveryCost] = useState(5000);
+  const [show, setShow] = useState(false);
+  const [action, setAction] = useState("");
+
+  //Show Modal
+  const handleClose = () => setShow(false);
+  const showConfirmation = (event) => {
+    setAction(event);
+    setShow(true);
+  };
+
+  //Process Transaction
+  const processTransaction = (event) => {
+    const act = event === "Approve" ? "Approved" : "Rejected";
+    const data = { id: dataPlaceholder.invoice_id, act };
+
+    console.log(data);
+
+    Axios.put(API_URL + `/transaction/status`, data)
+      .then((respond) => console.log("Success", respond))
+      .catch((err) => console.log(err));
+
+    handleClose();
+
+    //Refresh page
+    window.location.reload();
+  };
 
   //Get Transactions Data By ID
   const getTxnID = () => {
@@ -103,7 +130,7 @@ function TransactionDetails() {
               <div className="center-item fw-bold">Payment Proof</div>
               <Image
                 rounded
-                src={`${process.env.REACT_APP_API_URL}/products/Ibuprofen.jpg`}
+                src={`${process.env.REACT_APP_API_URL}/products/paymentProof/${dataPlaceholder.filename}`}
                 className="w-50 h-auto"
               />
             </div>
@@ -122,14 +149,38 @@ function TransactionDetails() {
               </thead>
               <tbody>{renderAllTrx()}</tbody>
             </Table>
-            <div className="w-100 d-flex justify-content-center">
-              <Button className="me-2 w-25" variant="success">
-                Approve
-              </Button>
-              <Button className="me-2 w-25" variant="danger">
-                Reject
-              </Button>
-            </div>
+            {dataPlaceholder.status === "On Process" ? (
+              <div className="w-100 d-flex justify-content-center">
+                <Button
+                  name="Approve"
+                  onClick={(e) => showConfirmation(e.target.name)}
+                  className="me-2 w-25"
+                  variant="success"
+                >
+                  Approve
+                </Button>
+                <Button
+                  name="Reject"
+                  onClick={(e) => showConfirmation(e.target.name)}
+                  className="me-2 w-25"
+                  variant="danger"
+                >
+                  Reject
+                </Button>
+              </div>
+            ) : (
+              <h4>
+                <Badge
+                  className={`${
+                    dataPlaceholder.status === "Rejected"
+                      ? "bg-danger font-light"
+                      : "bg-success font-light"
+                  }`}
+                >
+                  Status: {dataPlaceholder.status}
+                </Badge>
+              </h4>
+            )}
           </Card.Body>
         </Card>
       </div>
@@ -138,6 +189,25 @@ function TransactionDetails() {
           Back to Transaction
         </Button>
       </div>
+      <Modal
+        show={show}
+        backdrop="static"
+        keyboard={false}
+        onHide={handleClose}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{`${action} Confirmation`}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{`${action} this transaction?`}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => processTransaction(action)}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
