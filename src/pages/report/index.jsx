@@ -12,6 +12,14 @@ function Report(props) {
   const user = useSelector((state) => state.user);
   const [data, setData] = useState([]);
   const [sold, setSold] = useState([]);
+  const [totalProfit, setTotalProfit] = useState(null);
+  const [totalCost, setTotalCost] = useState(null);
+  const [totalRevenue, setTotalRevenue] = useState(null);
+  var formatter = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  });
+
   //Pagination
 
   //Variable Name
@@ -46,6 +54,26 @@ function Report(props) {
       .then((respond) => {
         setSold(respond.data);
         console.log(respond.data);
+      })
+      .catch((error) => console.log(error));
+    Axios.get(API_URL + `/products/total`)
+      .then((respond) => {
+        let profit = 0;
+        let revenue = 0;
+        let cost = 0;
+        const sum = respond.data.map((x) => {
+          profit += x.total_profit;
+          revenue += x.revenue;
+          cost += x.total_cost;
+          console.log(profit);
+        });
+
+        setTotalProfit(profit);
+        setTotalRevenue(revenue);
+        setTotalCost(cost);
+        console.log("Profit :", totalProfit);
+        console.log("Revenue :", totalRevenue);
+        console.log("Cost :", totalCost);
       })
       .catch((error) => console.log(error));
 
@@ -112,7 +140,42 @@ function Report(props) {
         <div className="table">
           <Table striped bordered hover size="sm">
             <thead>
-              <h5>Top 3 Most Sold</h5>
+              <div className="container-report">
+                <div>
+                  <div>
+                    <h2 className="color-text">Profit</h2>
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "10%",
+                    }}
+                  >
+                    <h4>{formatter.format(totalProfit)}</h4>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      marginBottom: "25%",
+                    }}
+                  >
+                    <div>
+                      <h5 className="color-text">Revenue</h5>
+                    </div>
+                    <div>{formatter.format(totalRevenue)}</div>
+                  </div>
+                  <div>
+                    <div>
+                      <h5 className="color-text">Cost</h5>
+                    </div>
+                    <div>{formatter.format(totalCost)}</div>
+                  </div>
+                </div>
+              </div>
+
+              <tr>
+                <h5>Top 3 Most Sold</h5>
+              </tr>
               <tr>
                 <th>Product</th>
                 <th>Qty</th>

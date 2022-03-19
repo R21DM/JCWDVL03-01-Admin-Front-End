@@ -5,6 +5,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 var search = "";
 var category = "";
 var minPrice = null;
+var sort = null;
 
 const getProducts = (param) => {
   return async (dispatch) => {
@@ -16,26 +17,17 @@ const getProducts = (param) => {
         param === "" ? "/products/get" : `/products/get?name=%${param}%`;
 
       if (category) {
-        query = `/products/get?name=%${search}%&type=${
-          category === "" ? "" : category
-        }`;
-
-        if (minPrice) {
-          query = `/products/get?name=%${search}%&type=${
-            category === "" ? "" : category
-          }&minPrice=${minPrice}`;
-        }
+        query += `&type=${category}`;
       }
       if (minPrice) {
-        query = `/products/get?name=%${search}%&minPrice=${minPrice}`;
-
-        if (category) {
-          query = `/products/get?name=%${search}%&type=${
-            category === "" ? "" : category
-          }&minPrice=${minPrice}`;
-        }
+        query += `&minPrice=${minPrice}`;
       }
+      if (sort) {
+        param === "" ? (query += `?sort=${sort}`) : (query += `&sort=${sort}`);
+      }
+
       const respond = await Axios.get(API_URL + query);
+      console.log("query", query);
       // console.log("respond", respond);
       dispatch({ type: GET_PRODUCTS, payload: respond.data });
     } catch (error) {
@@ -48,33 +40,21 @@ const categoryProducts = (x) => {
   return async (dispatch) => {
     try {
       category = x;
-      let query = x === "" ? `/products/get` : `/products/get?type=${category}`;
+      let query = `/products/get?type=${x}`;
       if (search) {
-        query = `/products/get?name=%${search}%&type=${
-          category === "" ? "" : category
-        }`;
-
-        if (minPrice) {
-          query = `/products/get?name=%${search}%&type=${
-            category === "" ? "" : category
-          }&minPrice=${minPrice}`;
-        }
+        query += `&name=%${search}%`;
       }
       if (minPrice) {
-        query = `/products/get?type=${
-          category === "" ? "" : category
-        }&minPrice=${minPrice}`;
-
-        if (search) {
-          query = `/products/get?name=%${search}%&type=${
-            category === "" ? "" : category
-          }&minPrice=${minPrice}`;
-        }
+        query += `&minPrice=${minPrice}`;
+      }
+      if (sort) {
+        query += `&sort=${sort}`;
       }
       const respond = await Axios.get(API_URL + query);
       console.log("search", search);
       console.log("category", category);
       console.log("respond", respond);
+      console.log("query", query);
       dispatch({ type: GET_PRODUCTS, payload: respond.data });
     } catch (error) {
       console.log(error);
@@ -91,27 +71,17 @@ const minPriceFilter = (x) => {
 
       if (search) {
         query = `/products/get?name=%${search}%&minPrice=${x}`;
-
-        if (category) {
-          query = `/products/get?name=%${search}%&type=${
-            category === "" ? "" : category
-          }&minPrice=${minPrice}`;
-        }
       }
       if (category) {
-        query = `/products/get?type=${
-          category === "" ? "" : category
-        }&minPrice=${minPrice}`;
-
-        if (search) {
-          query = `/products/get?name=%${search}%&type=${
-            category === "" ? "" : category
-          }&minPrice=${minPrice}`;
-        }
+        query += `&type=${category}`;
+      }
+      if (sort) {
+        x === "" ? (query += `?sort=${sort}`) : (query += `&sort=${sort}`);
       }
 
       const respond = await Axios.get(API_URL + query);
       console.log("respond", respond);
+      console.log("query", query);
       dispatch({ type: GET_PRODUCTS, payload: respond.data });
     } catch (error) {
       console.log(error);
@@ -119,4 +89,30 @@ const minPriceFilter = (x) => {
   };
 };
 
-export { getProducts, categoryProducts, minPriceFilter };
+const sortFilter = (x) => {
+  sort = x;
+  return async (dispatch) => {
+    try {
+      let query =
+        search === ""
+          ? `/products/get?sort=${sort}`
+          : `/products/get?name=%${search}%&sort=${sort}`;
+
+      if (category) {
+        query += `&type=${category}`;
+      }
+      if (minPrice) {
+        query += `&minPrice=${minPrice}`;
+      }
+
+      const respond = await Axios.get(API_URL + query);
+      console.log("query", query);
+      // console.log("respond", respond);
+      dispatch({ type: GET_PRODUCTS, payload: respond.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export { getProducts, categoryProducts, minPriceFilter, sortFilter };

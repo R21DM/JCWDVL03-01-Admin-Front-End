@@ -2,3 +2,15 @@
   margin: 1vh 2vw;
   width: 92vw;
 }
+
+.color-text {
+  color: mediumturquoise;
+}
+
+.container-report {
+  display: flex;
+  margin-bottom: 2%;
+  align-items: center;
+  justify-content: space-around;
+  font-weight: bold;
+}

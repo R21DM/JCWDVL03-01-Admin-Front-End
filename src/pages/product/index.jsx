@@ -6,6 +6,7 @@ import {
   getProducts,
   categoryProducts,
   minPriceFilter,
+  sortFilter,
 } from "../../actions/product-actions";
 import {
   Button,
@@ -32,17 +33,23 @@ function Product(props) {
   });
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [searchType, setSearchType] = useState("Search");
   const [syringe, setSyringe] = useState(true);
   const [pill, setPill] = useState(true);
   const [table, setTable] = useState(true);
   const [del, setDel] = useState(false);
   const [upd, setUpd] = useState(false);
+  const [updNew, setUpdNew] = useState(false);
   const [delID, setDelID] = useState(null);
   const [selectFile, setSelectFile] = useState();
   const [item, setItem] = useState(null);
+  const [itemNew, setItemNew] = useState(false);
   const [itemObj, setItemObj] = useState({
+    create_at: undefined,
+    update_at: undefined,
+  });
+  const [itemObjNew, setItemObjNew] = useState({
     create_at: undefined,
     update_at: undefined,
   });
@@ -76,15 +83,13 @@ function Product(props) {
       .then((respond) => {
         // console.log(respond.data);
         dispatch(getProducts(""));
-        setLoading(false);
       })
       .catch((error) => console.log(error));
-
+    setSearchType("Search");
     const TOKEN = localStorage.getItem("token");
     const KEY = sessionStorage.getItem("key");
     if (!user.id) {
       if (TOKEN || KEY) {
-        setLoading(true);
         return;
       } else navigate("../login");
     }
@@ -100,9 +105,9 @@ function Product(props) {
   }, [page]);
 
   const onButtonSearch = () => {
+    setSearchType("Search");
     navigate("/product");
     dispatch(getProducts(search));
-    setLoading(false);
   };
 
   const deleteData = (x) => {
@@ -128,7 +133,7 @@ function Product(props) {
   };
 
   //On file upload
-  const onFileUpload = () => {
+  const onFileUpload = (x) => {
     const dataArray = new FormData();
     dataArray.append("uploaded-file", selectFile);
     dataArray.append("filename", selectFile.name);
@@ -139,11 +144,21 @@ function Product(props) {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-      params: { id: itemObj.id, name: products[itemObj.id - 1].name },
+      params: {
+        id: x.id,
+        name: x.name || products[x.id - 1].name,
+      },
     })
       .then((respond) => {
         console.log("respond", respond);
-        itemObj = {};
+        setItemObj({
+          create_at: undefined,
+          update_at: undefined,
+        });
+        setItemObjNew({
+          create_at: undefined,
+          update_at: undefined,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -152,20 +167,45 @@ function Product(props) {
 
   const updDatCon = () => {
     if (selectFile) {
-      onFileUpload();
+      onFileUpload(itemObj);
     }
 
     Axios.put(API_URL + `/products/${itemObj.id}`, itemObj)
       .then((respond) => {
         console.log(itemObj);
         setUpd(false);
-        itemObj = {};
+        setItemObj({
+          create_at: undefined,
+          update_at: undefined,
+        });
         window.location.reload();
       })
       .catch((error) => {
         console.log(error);
         window.location.reload();
       });
+  };
+  const conAddItem = () => {
+    if (selectFile) {
+      onFileUpload(itemObjNew);
+    }
+    Axios.post(API_URL + `/products/add`, itemObjNew)
+      .then((respond) => {
+        console.log(itemObjNew);
+        setUpd(false);
+        setItemObjNew({
+          create_at: undefined,
+          update_at: undefined,
+        });
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+        window.location.reload();
+      });
+    setUpdNew(false);
+    setItemNew(false);
+    setItemObjNew({ create_at: undefined, update_at: undefined });
   };
 
   const renderListProducts = () => {
@@ -190,8 +230,14 @@ function Product(props) {
                 {`/${product.unit}`}
               </Card.Text>
               <Button
+                value={product.name}
                 variant="primary"
-                onClick={() => navigate(`/product/${product.id}`)}
+                onClick={(e) => {
+                  setSearchType(`${e.target.value}`);
+                  dispatch(getProducts(e.target.value));
+                  console.log(e.target.key);
+                  setTable(true);
+                }}
               >
                 Check Details
               </Button>
@@ -199,6 +245,344 @@ function Product(props) {
           </Card>
         );
       });
+  };
+
+  const addItem = () => {
+    return (
+      <tr style={{ display: "flex", flexDirection: "column" }}>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Name
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.name}
+            onChange={(event) => {
+              setItemObjNew({ ...itemObjNew, name: event.target.value });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Price
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.price}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                price: (event.target.value = event.target.value
+                  .replace(/[^0-9.]/g, "")
+                  .replace(/(\..*)\./g, "")),
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Volume
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.volume}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                volume: (event.target.value = event.target.value
+                  .replace(/[^0-9.]/g, "")
+                  .replace(/(\..*)\./g, "")),
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Volume/bottle
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.volume_per_bottle}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                volume_per_bottle: (event.target.value = event.target.value
+                  .replace(/[^0-9.]/g, "")
+                  .replace(/(\..*)\./g, "")),
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Unit
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.unit}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                unit: event.target.value,
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Filename
+            </h6>
+          </Form.Label>
+          <Form.Control type="text" disabled={true} defaultValue={null} />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Description
+            </h6>
+          </Form.Label>
+          <InputGroup>
+            <FormControl
+              as="textarea"
+              aria-label="With textarea"
+              type="text"
+              value={itemObjNew.description}
+              onChange={(event) => {
+                setItemObjNew({
+                  ...itemObjNew,
+                  description: event.target.value,
+                });
+                console.log(itemObjNew);
+              }}
+            />
+          </InputGroup>
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Brand
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.brand}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                brand: event.target.value,
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label style={{ display: "flex", flexDirection: "row" }}>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "0%",
+                marginBottom: "0%",
+              }}
+            >
+              Drug Class
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.drug_class}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                drug_class: event.target.value,
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label style={{ display: "flex", flexDirection: "row" }}>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "0%",
+                marginBottom: "0",
+              }}
+            >
+              Before Taking
+            </h6>
+          </Form.Label>
+          <InputGroup>
+            <FormControl
+              as="textarea"
+              aria-label="With textarea"
+              type="text"
+              value={itemObjNew.before_taking}
+              onChange={(event) => {
+                setItemObjNew({
+                  ...itemObjNew,
+                  before_taking: event.target.value,
+                });
+                console.log(itemObjNew);
+              }}
+            />
+          </InputGroup>
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Dosage
+            </h6>
+          </Form.Label>
+          <InputGroup>
+            <FormControl
+              as="textarea"
+              aria-label="With textarea"
+              type="text"
+              value={itemObjNew.dosage}
+              onChange={(event) => {
+                setItemObjNew({
+                  ...itemObjNew,
+                  dosage: event.target.value,
+                });
+                console.log(itemObjNew);
+              }}
+            />
+          </InputGroup>
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Type
+            </h6>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            value={itemObjNew.type}
+            onChange={(event) => {
+              setItemObjNew({
+                ...itemObjNew,
+                type: event.target.value,
+              });
+              console.log(itemObjNew);
+            }}
+          />
+        </td>
+        <td>
+          <Form.Label>
+            <h6
+              style={{
+                color: "grey",
+                marginLeft: "5%",
+                marginBottom: "-8%",
+              }}
+            >
+              Image
+            </h6>
+          </Form.Label>
+          <Col sm="10">
+            <input
+              name="uploaded-file"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSelectFile(e.target.files[0])}
+            />
+          </Col>
+        </td>
+        <td
+          style={{ display: "flex", justifyContent: "center", marginTop: "5%" }}
+        >
+          <Button variant="warning" onClick={() => setItemNew(null)}>
+            Cancel
+          </Button>
+          <Button
+            style={{ marginLeft: "1%" }}
+            variant="success"
+            onClick={() => {
+              setUpdNew(true);
+              console.log(itemObjNew);
+            }}
+          >
+            Save
+          </Button>
+        </td>
+      </tr>
+    );
   };
 
   const renderTableListProducts = () => {
@@ -212,7 +596,7 @@ function Product(props) {
         var updateTime = new Date(product.update_at).toLocaleTimeString("id");
         console.log();
         if (item) {
-          if (product.id == item.id) {
+          if (product.id === item.id) {
             return (
               <tr
                 key={item.id}
@@ -540,7 +924,13 @@ function Product(props) {
                   </Col>
                 </td>
                 <td style={{ display: "flex", justifyContent: "center" }}>
-                  <Button variant="warning" onClick={() => setItem(null)}>
+                  <Button
+                    variant="warning"
+                    onClick={() => {
+                      setEditableItem(false);
+                      return setItem(null);
+                    }}
+                  >
                     Cancel
                   </Button>
                   <Button
@@ -633,11 +1023,14 @@ function Product(props) {
         <div className="center-item main-color">
           <Form className="d-flex search">
             <FormControl
-              placeholder="Search"
+              placeholder={searchType}
               className="me-2"
               aria-label="Search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearchType("Search");
+                setSearch(e.target.value);
+              }}
             />
             <Button
               variant="outline-success"
@@ -662,6 +1055,18 @@ function Product(props) {
                 variant="outline-success"
               >
                 Table
+              </Button>
+            </div>
+            <div className="button-type">
+              <Button
+                onClick={() => {
+                  return setItemNew(true);
+                }}
+                className="register-btn "
+                variant="outline-success"
+                style={{ display: "flex", flexDirection: "row" }}
+              >
+                <div>Add</div>
               </Button>
             </div>
           </Form>
@@ -736,6 +1141,41 @@ function Product(props) {
                   </label>
                 </div>
               </div>
+              <div className="filter-header2">
+                <div className="filter-header-color">
+                  <h6 className="left2">Sort</h6>
+                </div>
+
+                <div className="left2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="sortFil"
+                    name="sortPrice"
+                    onChange={() => {
+                      dispatch(sortFilter(`asc`));
+                    }}
+                  />
+                  <label className="form-check-label" htmlFor="sortFil">
+                    Lowest Price
+                  </label>
+                </div>
+
+                <div className="left2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="sortFil2"
+                    name="sortPrice"
+                    onChange={() => {
+                      dispatch(sortFilter(`desc`));
+                    }}
+                  />
+                  <label className="form-check-label" htmlFor="sortFil2">
+                    Highest Price
+                  </label>
+                </div>
+              </div>
               <div className="filter-header3">
                 <div className="filter-header2 filter-header-color">
                   <h6 className="left3">Price</h6>
@@ -792,12 +1232,12 @@ function Product(props) {
         <div className="d-flex justify-content-center py-2">
           <Pagination>
             <Pagination.Prev
-              disabled={page == 1 ? true : false}
+              disabled={page === 1 ? true : false}
               onClick={() => setPage(page - 1)}
             />
             {items}
             <Pagination.Next
-              disabled={page == endPageNumber ? true : false}
+              disabled={page === endPageNumber ? true : false}
               onClick={() => setPage(page + 1)}
             />
           </Pagination>
@@ -859,6 +1299,56 @@ function Product(props) {
             </Button>
             <Button variant="primary" onClick={() => updDatCon()}>
               Edit
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* ---------Add New---------- */}
+
+        <Modal show={itemNew} style={{}}>
+          <Modal.Header
+            closeButton
+            onClick={() => {
+              setItemNew(false);
+            }}
+          >
+            <Modal.Title>
+              <h5
+                style={{
+                  color: "mediumturquoise",
+                }}
+              >
+                Add New Product
+              </h5>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{addItem()}</Modal.Body>
+
+          <Modal.Footer></Modal.Footer>
+        </Modal>
+
+        {/* --------- confirm ---------- */}
+        <Modal show={updNew} style={{ width: "20%", marginLeft: "40%" }}>
+          <Modal.Header
+            closeButton
+            onClick={() => {
+              setUpdNew(false);
+            }}
+          >
+            <Modal.Title>Are you sure?</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setUpdNew(false);
+              }}
+            >
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => conAddItem()}>
+              Save
             </Button>
           </Modal.Footer>
         </Modal>
