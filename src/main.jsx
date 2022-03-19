@@ -10,6 +10,7 @@ import Login from "./pages/login";
 import Header from "./pages/header";
 import User from "./pages/user";
 import Transaction from "./pages/transaction";
+import TransactionDetails from "./pages/transaction-details";
 
 function Main() {
   return (
@@ -33,6 +34,7 @@ function MainRoute() {
         <Route path="report" element={<Report />} />
         <Route path="user" element={<User />} />
         <Route path="transaction" element={<Transaction />} />
+        <Route path="transaction/:id" element={<TransactionDetails />} />
       </Routes>
     </>
   );
