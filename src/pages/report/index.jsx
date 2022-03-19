@@ -137,10 +137,11 @@ function Report(props) {
         var createTime = new Date(data.create_at).toLocaleTimeString("id");
         var updateDate = new Date(data.update_at).toLocaleDateString("id");
         var updateTime = new Date(data.update_at).toLocaleTimeString("id");
+        var noID = no + 1 + itemPerPage * (page - 1);
         console.log();
         return (
           <tr key={data.id}>
-            <td>{no + 1}</td>
+            <td>{noID}</td>
             <td>{data.username}</td>
             <td>{data.product_name}</td>
             <td>{data.qty}</td>
