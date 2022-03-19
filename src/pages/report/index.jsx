@@ -170,8 +170,9 @@ function Report(props) {
       {/* --------------------------- Main ------------------------------*/}
 
       <main id="main">
-        <div className="table">
-          <Form.Group className="d-flex mx-auto">
+        <div className="w-50 mx-auto">
+          <h4 className="color-text me-5 mt-4 mb-2 text-center">Filter Date</h4>
+          <Form.Group className="d-flex mx-auto mb-4 ms-4">
             <Form.Control
               type="date"
               name="start"
@@ -187,6 +188,8 @@ function Report(props) {
             />
             <Button onClick={() => filterDate()}>Search</Button>
           </Form.Group>
+        </div>
+        <div className="table">
           <Table striped bordered hover size="sm">
             <thead>
               <div className="container-report">
