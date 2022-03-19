@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Table, Pagination } from "react-bootstrap";
+import { Button, Table, Pagination, Form } from "react-bootstrap";
 import "./style.css";
 import Axios from "axios";
 
@@ -15,6 +15,10 @@ function Transaction() {
   const [page, setPage] = useState(1);
   const [indexStartItem, setIndexStartItem] = useState(0);
   const [data, setData] = useState([]);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [filteredData, setFilteredData] = useState([]);
+  const [dateFilter, setDateFilter] = useState(false);
 
   //Get All Transactions Data
   const getTxnAll = () => {
@@ -39,11 +43,46 @@ function Transaction() {
     }
   }, []);
 
+  //Filter Date
+  const filterDate = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    console.log(start.getTime());
+    console.log(Math.floor(Date.now() / 100000) * 100000);
+
+    const result = data.filter((val) => {
+      //Filter if start value null
+      if (!startDate) {
+        return new Date(val.create_at.slice(0, 10)).getTime() <= end.getTime();
+      }
+
+      //Filter if end value null
+      if (!endDate) {
+        return (
+          new Date(val.create_at.slice(0, 10)).getTime() >= start.getTime()
+        );
+      }
+
+      //Filter if both values not null
+      return (
+        new Date(val.create_at.slice(0, 10)).getTime() >= start.getTime() &&
+        new Date(val.create_at.slice(0, 10)).getTime() <= end.getTime()
+      );
+    });
+    console.log(result);
+
+    setFilteredData(result);
+    setDateFilter(true);
+    setPage(1);
+  };
+
   //Pagination control
   const active = page;
   const items = [];
   const itemPerPage = 10;
-  const endPageNumber = Math.ceil(data.length / itemPerPage);
+  const showData = dateFilter ? filteredData : data;
+  const endPageNumber = Math.ceil(showData.length / itemPerPage);
   for (let number = 1; number <= endPageNumber; number++) {
     items.push(
       <Pagination.Item
@@ -66,7 +105,10 @@ function Transaction() {
   }, [page]);
 
   const renderAllTrx = () => {
-    return data
+    //Show data
+    const showData = dateFilter ? filteredData : data;
+
+    return showData
       .slice(indexStartItem, indexStartItem + itemPerPage)
       .map((val, idx) => {
         const order_date = val.create_at.slice(0, 10);
@@ -97,7 +139,28 @@ function Transaction() {
   };
 
   return (
-    <div>
+    <div className="d-flex flex-column">
+      <Form className="mx-5 d-flex flex-column justify-content-center my-2 bg-light py-2">
+        <Form.Group className="mx-auto">
+          <Form.Label className="fw-bold">Filter Date</Form.Label>
+        </Form.Group>
+        <Form.Group className="d-flex mx-auto">
+          <Form.Control
+            type="date"
+            name="start"
+            className="me-2"
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <Form.Label className="me-2 my-auto">{` - `}</Form.Label>
+          <Form.Control
+            type="date"
+            name="end"
+            className="me-2"
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <Button onClick={() => filterDate()}>Search</Button>
+        </Form.Group>
+      </Form>
       <div className="table">
         <Table striped bordered hover size="sm">
           <thead>
