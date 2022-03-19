@@ -48,9 +48,6 @@ function Transaction() {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    console.log(start.getTime());
-    console.log(Math.floor(Date.now() / 100000) * 100000);
-
     const result = data.filter((val) => {
       //Filter if start value null
       if (!startDate) {
