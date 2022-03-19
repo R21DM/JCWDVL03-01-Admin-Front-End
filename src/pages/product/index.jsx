@@ -22,6 +22,7 @@ import {
 import "../product/style.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
+const USER_URL = process.env.REACT_APP_LOCAL_URL;
 
 function Product(props) {
   const dispatch = useDispatch();
@@ -104,6 +105,10 @@ function Product(props) {
     console.log("current page:", page);
   }, [page]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [products]);
+
   const onButtonSearch = () => {
     setSearchType("Search");
     navigate("/product");
@@ -139,8 +144,23 @@ function Product(props) {
     dataArray.append("filename", selectFile.name);
 
     console.log(dataArray);
-
     Axios.post(API_URL, dataArray, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      params: {
+        id: x.id,
+        name: x.name || products[x.id - 1].name,
+      },
+    })
+      .then((respond) => {
+        console.log("respond", respond);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    Axios.post(USER_URL, dataArray, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

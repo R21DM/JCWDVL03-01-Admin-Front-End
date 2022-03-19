@@ -120,13 +120,8 @@ function Report(props) {
   }, []);
 
   useEffect(() => {
-    //Set pagination
-    const startIndex = 0 + itemPerPage * (page - 1);
-    setIndexStartItem(startIndex);
-
-    //Check page
-    console.log("current page:", page);
-  }, [page]);
+    setPage(1);
+  }, [data]);
 
   const renderReport = () => {
     console.log(data);
