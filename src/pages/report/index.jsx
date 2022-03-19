@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Table, Pagination } from "react-bootstrap";
+import { Button, Table, Pagination, Form } from "react-bootstrap";
 import "./style.css";
 import Axios from "axios";
 
@@ -12,6 +12,9 @@ function Report(props) {
   const user = useSelector((state) => state.user);
   const [data, setData] = useState([]);
   const [sold, setSold] = useState([]);
+  const [endDate, setEndDate] = useState([]);
+  const [startDate, setStartDate] = useState([]);
+
   const [totalProfit, setTotalProfit] = useState(null);
   const [totalCost, setTotalCost] = useState(null);
   const [totalRevenue, setTotalRevenue] = useState(null);
@@ -44,10 +47,40 @@ function Report(props) {
     );
   }
 
+  //Filter Date
+  const filterDate = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    console.log(start.getTime(), end);
+    const result = data.filter((val) => {
+      //Filter if start value null
+      if (!startDate) {
+        return new Date(val.create_at.slice(0, 10)).getTime() <= end.getTime();
+      }
+
+      //Filter if end value null
+      if (!endDate) {
+        return (
+          new Date(val.create_at.slice(0, 10)).getTime() >= start.getTime()
+        );
+      }
+
+      //Filter if both values not null
+      return (
+        new Date(val.create_at.slice(0, 10)).getTime() >= start.getTime() &&
+        new Date(val.create_at.slice(0, 10)).getTime() <= end.getTime()
+      );
+    });
+    console.log(result);
+    setPage(1);
+  };
+
   useEffect(() => {
     Axios.get(API_URL + `/products/log`)
       .then((respond) => {
         setData(respond.data);
+        let data = respond.data[0];
       })
       .catch((error) => console.log(error));
     Axios.get(API_URL + `/products/sold`)
@@ -138,6 +171,22 @@ function Report(props) {
 
       <main id="main">
         <div className="table">
+          <Form.Group className="d-flex mx-auto">
+            <Form.Control
+              type="date"
+              name="start"
+              className="me-2"
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <Form.Label className="me-2 my-auto">{` - `}</Form.Label>
+            <Form.Control
+              type="date"
+              name="end"
+              className="me-2"
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            <Button onClick={() => filterDate()}>Search</Button>
+          </Form.Group>
           <Table striped bordered hover size="sm">
             <thead>
               <div className="container-report">
