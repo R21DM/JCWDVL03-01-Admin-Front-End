@@ -123,6 +123,15 @@ function Report(props) {
     setPage(1);
   }, [data]);
 
+  useEffect(() => {
+    //Set pagination
+    const startIndex = 0 + itemPerPage * (page - 1);
+    setIndexStartItem(startIndex);
+
+    //Check page
+    console.log("current page:", page);
+  }, [page]);
+
   const renderReport = () => {
     console.log(data);
     return data
