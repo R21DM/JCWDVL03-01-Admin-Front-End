@@ -39,6 +39,8 @@ function Product(props) {
   const [syringe, setSyringe] = useState(true);
   const [pill, setPill] = useState(true);
   const [table, setTable] = useState(true);
+  const [detailed, setDetailed] = useState(false);
+
   const [del, setDel] = useState(false);
   const [upd, setUpd] = useState(false);
   const [updNew, setUpdNew] = useState(false);
@@ -973,25 +975,59 @@ function Product(props) {
               <td>{product.volume}</td>
               <td>{product.volume_per_bottle}</td>
               <td>{product.unit}</td>
-              <td>{product.description}</td>
-              <td>{product.brand}</td>
-              <td>{product.drug_class}</td>
-              <td>{product.before_taking}</td>
-              <td>{product.dosage}</td>
+              {detailed ? <td>{product.description}</td> : null}
+              {detailed ? <td>{product.brand}</td> : null}
+              {detailed ? <td>{product.drug_class}</td> : null}
+              {detailed ? <td>{product.before_taking}</td> : null}
+              {detailed ? <td>{product.dosage}</td> : null}
               <td>{product.type}</td>
               <td>{createDate + "  " + createTime}</td>
               <td>{updateDate + "  " + updateTime}</td>
-              <td style={{ display: "flex" }}>
-                <Button
-                  variant="danger"
-                  onClick={() => deleteData(product.id)}
-                  style={{ marginRight: "4px" }}
+              <td style={{ width: "20vw" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
                 >
-                  Delete
-                </Button>
-                <Button variant="warning" onClick={() => editData(product)}>
-                  Edit
-                </Button>
+                  <div>
+                    {detailed ? (
+                      <Button
+                        variant="info"
+                        size="me-2"
+                        style={{ width: "8vw", marginLeft: "4px" }}
+                        onClick={() => setDetailed(false)}
+                      >
+                        Less Detail
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="info"
+                        size="me-2"
+                        style={{ width: "8vw", marginLeft: "4px" }}
+                        onClick={() => setDetailed(true)}
+                      >
+                        More Detail
+                      </Button>
+                    )}
+                  </div>
+                  <div>
+                    <Button
+                      variant="warning"
+                      style={{ width: "5vw", marginLeft: "4px" }}
+                      onClick={() => editData(product)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() => deleteData(product.id)}
+                      style={{ width: "5vw", marginLeft: "4px" }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </div>
               </td>
             </tr>
           );
@@ -1001,7 +1037,13 @@ function Product(props) {
   const renderTable = () => {
     return (
       <div>
-        <Table striped bordered hover size="sm" style={{ fontSize: "10px" }}>
+        <Table
+          striped
+          bordered
+          hover
+          size="sm"
+          style={detailed ? { fontSize: "10px" } : { fontSize: "16px" }}
+        >
           <thead>
             {!editableItem ? (
               <tr>
@@ -1011,11 +1053,11 @@ function Product(props) {
                 <th>Volume</th>
                 <th>Volume/bottle</th>
                 <th>Unit</th>
-                <th>Description</th>
-                <th>Brand</th>
-                <th>Drug Class</th>
-                <th>Before Taking</th>
-                <th>Dosage</th>
+                {detailed ? <th>Description</th> : null}
+                {detailed ? <th>Brand</th> : null}
+                {detailed ? <th>Drug Class</th> : null}
+                {detailed ? <th>Before Taking</th> : null}
+                {detailed ? <th>Dosage</th> : null}
                 <th>Type</th>
                 <th>Date</th>
                 <th>'Date (Updated)'</th>
