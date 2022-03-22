@@ -24,6 +24,7 @@ function TransactionDetails() {
   const [deliveryCost, setDeliveryCost] = useState(5000);
   const [show, setShow] = useState(false);
   const [action, setAction] = useState("");
+  const [username, setUsername] = useState("");
 
   //Show Modal
   const handleClose = () => setShow(false);
@@ -37,10 +38,14 @@ function TransactionDetails() {
     const act = event === "Approve" ? "Approved" : "Rejected";
     const data = { id: dataPlaceholder.invoice_id, act };
 
+    postProductLog();
+
     console.log(data);
 
     Axios.put(API_URL + `/transaction/status`, data)
-      .then((respond) => console.log("Success", respond))
+      .then((respond) => {
+        console.log("Success", respond);
+      })
       .catch((err) => console.log(err));
 
     handleClose();
@@ -63,8 +68,26 @@ function TransactionDetails() {
             ? 10000
             : 20000
         );
+        Axios.get(API_URL + `/users/username/${respond.data[0].user_id}`)
+          .then((respond) => {
+            setUsername(respond.data[0].username);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((error) => console.log(error));
+  };
+
+  //Post product log
+  const postProductLog = () => {
+    const logData = data;
+    Axios.post(
+      API_URL + `/transaction/log/${dataPlaceholder.user_id}/${username}`,
+      logData
+    )
+      .then((respond) => {
+        console.log(respond);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
