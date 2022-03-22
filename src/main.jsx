@@ -11,6 +11,7 @@ import Header from "./pages/header";
 import User from "./pages/user";
 import Transaction from "./pages/transaction";
 import TransactionDetails from "./pages/transaction-details";
+import Change from "./pages/change";
 
 function Main() {
   return (
@@ -19,6 +20,7 @@ function Main() {
         {/* path="*" : wajib */}
         <Route path="*" element={<MainRoute />} />
         <Route path="/login" element={<Login />} />
+        <Route path="change-password" element={<Change />} />
       </Routes>
     </div>
   );
@@ -30,6 +32,7 @@ function MainRoute() {
       <Header />
       <Routes>
         <Route path="" element={<Admin />} />
+
         <Route path="product" element={<Product />} />
         <Route path="report" element={<Report />} />
         <Route path="user" element={<User />} />

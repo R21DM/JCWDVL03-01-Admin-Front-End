@@ -142,7 +142,7 @@ function Report(props) {
         var updateDate = new Date(data.update_at).toLocaleDateString("id");
         var updateTime = new Date(data.update_at).toLocaleTimeString("id");
         var noID = no + 1 + itemPerPage * (page - 1);
-        console.log();
+        console.log(createDate);
         return (
           <tr key={data.id}>
             <td>{noID}</td>
