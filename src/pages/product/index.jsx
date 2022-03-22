@@ -18,6 +18,7 @@ import {
   Pagination,
   InputGroup,
   Col,
+  ButtonGroup,
 } from "react-bootstrap";
 import "../product/style.css";
 
@@ -40,6 +41,8 @@ function Product(props) {
   const [pill, setPill] = useState(true);
   const [table, setTable] = useState(true);
   const [detailed, setDetailed] = useState(false);
+  const [inputBottle, setInputBottle] = useState(0);
+  const [bottle, setBottle] = useState(0);
 
   const [del, setDel] = useState(false);
   const [upd, setUpd] = useState(false);
@@ -188,6 +191,7 @@ function Product(props) {
   };
 
   const updDatCon = () => {
+    console.log(itemObj);
     if (selectFile) {
       onFileUpload(itemObj);
     }
@@ -686,12 +690,79 @@ function Product(props) {
                     </h6>
                   </Form.Label>
                   <Form.Control
+                    disabled={true}
                     type="text"
                     defaultValue={item.volume}
                     onChange={(event) => {
                       setItemObj({
                         ...itemObj,
                         volume: `${(event.target.value = event.target.value
+                          .replace(/[^0-9.]/g, "")
+                          .replace(/(\..*)\./g, ""))}`,
+                      });
+                      return console.log(itemObj);
+                    }}
+                  />
+                </td>
+                <td>
+                  <InputGroup className="volume-update mx-auto">
+                    <Button
+                      variant="info"
+                      disabled={inputBottle == 0 ? true : false}
+                      onClick={() => {
+                        setInputBottle(inputBottle - 1);
+
+                        console.log(
+                          "Input : ",
+                          inputBottle,
+                          "bottle :",
+                          bottle
+                        );
+                      }}
+                    >
+                      -
+                    </Button>
+                    <FormControl
+                      placeholder="Input bottle"
+                      value={inputBottle}
+                    />
+                    <Button
+                      variant="info"
+                      onClick={() => {
+                        setInputBottle(inputBottle + 1);
+
+                        console.log(
+                          "Input : ",
+                          inputBottle,
+                          "bottle :",
+                          bottle
+                        );
+                      }}
+                    >
+                      +
+                    </Button>
+                  </InputGroup>
+                </td>
+
+                <td>
+                  <Form.Label>
+                    <h6
+                      style={{
+                        color: "grey",
+                        marginLeft: "5%",
+                        marginBottom: "-8%",
+                      }}
+                    >
+                      Cost
+                    </h6>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    defaultValue={item.cost}
+                    onChange={(event) => {
+                      setItemObj({
+                        ...itemObj,
+                        cost: `${(event.target.value = event.target.value
                           .replace(/[^0-9.]/g, "")
                           .replace(/(\..*)\./g, ""))}`,
                       });
@@ -712,6 +783,7 @@ function Product(props) {
                     </h6>
                   </Form.Label>
                   <Form.Control
+                    disabled={true}
                     type="text"
                     defaultValue={item.volume_per_bottle}
                     onChange={(event) => {
@@ -958,7 +1030,17 @@ function Product(props) {
                   <Button
                     style={{ marginLeft: "1%" }}
                     variant="success"
-                    onClick={() => setUpd(true)}
+                    onClick={() => {
+                      setBottle(inputBottle * item.volume_per_bottle);
+                      setItemObj({
+                        ...itemObj,
+                        volume:
+                          inputBottle * item.volume_per_bottle + item.volume,
+                      });
+                      console.log(itemObj);
+                      console.log(inputBottle, bottle);
+                      setUpd(true);
+                    }}
                   >
                     Save
                   </Button>
