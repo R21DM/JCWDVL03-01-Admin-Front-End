@@ -14,8 +14,20 @@ function Report(props) {
   const [sold, setSold] = useState([]);
   const [endDate, setEndDate] = useState([]);
   const [startDate, setStartDate] = useState([]);
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
+  const [dataMoney, setDataMoney] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
+  const [filteredSold, setFilteredSold] = useState([]);
+  const [dateFilter, setDateFilter] = useState(false);
 
   const [totalProfit, setTotalProfit] = useState(null);
+  const [filteredProfit, setFilteredProfit] = useState(null);
+  const [filteredCost, setFilteredCost] = useState(null);
+  const [filteredRevenue, setFilteredRevenue] = useState(null);
+  const [filteredProfit2, setFilteredProfit2] = useState(null);
+  const [filteredCost2, setFilteredCost2] = useState(null);
+  const [filteredRevenue2, setFilteredRevenue2] = useState(null);
   const [totalCost, setTotalCost] = useState(null);
   const [totalRevenue, setTotalRevenue] = useState(null);
   var formatter = new Intl.NumberFormat("id-ID", {
@@ -30,49 +42,88 @@ function Report(props) {
   const [editableItem, setEditableItem] = useState({});
   const [indexStartItem, setIndexStartItem] = useState(0);
 
-  //Pagination control
-  const active = page;
-  const items = [];
-  const itemPerPage = 5;
-  const endPageNumber = Math.ceil(data.length / itemPerPage);
-  for (let number = 1; number <= endPageNumber; number++) {
-    items.push(
-      <Pagination.Item
-        onClick={() => setPage(number)}
-        key={number}
-        active={number === active}
-      >
-        {number}
-      </Pagination.Item>
-    );
-  }
-
   //Filter Date
   const filterDate = () => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    console.log(filteredCost2, filteredRevenue2, filteredProfit2);
+    const start = new Date(startDate).getTime();
+    const end = new Date(endDate).getTime();
 
-    console.log(start.getTime(), end);
     const result = data.filter((val) => {
       //Filter if start value null
-      if (!startDate) {
-        return new Date(val.create_at.slice(0, 10)).getTime() <= end.getTime();
+      if (!startDate.length) {
+        return new Date(val.create_at.slice(0, 10)).getTime() <= end;
       }
 
       //Filter if end value null
-      if (!endDate) {
-        return (
-          new Date(val.create_at.slice(0, 10)).getTime() >= start.getTime()
-        );
+      if (!endDate.length) {
+        return new Date(val.create_at.slice(0, 10)).getTime() >= start;
       }
 
       //Filter if both values not null
       return (
-        new Date(val.create_at.slice(0, 10)).getTime() >= start.getTime() &&
-        new Date(val.create_at.slice(0, 10)).getTime() <= end.getTime()
+        new Date(val.create_at.slice(0, 10)).getTime() >= start &&
+        new Date(val.create_at.slice(0, 10)).getTime() <= end
       );
     });
-    console.log(result);
+    const result2 = sold.filter((val) => {
+      //Filter if start value null
+      if (!startDate.length) {
+        return new Date(val.create_at.slice(0, 10)).getTime() <= end;
+      }
+
+      //Filter if end value null
+      if (!endDate.length) {
+        return new Date(val.create_at.slice(0, 10)).getTime() >= start;
+      }
+
+      //Filter if both values not null
+      return (
+        new Date(val.create_at.slice(0, 10)).getTime() >= start &&
+        new Date(val.create_at.slice(0, 10)).getTime() <= end
+      );
+    });
+    const result3 = dataMoney.filter((val) => {
+      console.log(dataMoney);
+      //Filter if start value null
+      if (!startDate.length) {
+        return new Date(val.update_at.slice(0, 10)).getTime() <= end;
+      }
+
+      //Filter if end value null
+      if (!endDate.length) {
+        return new Date(val.update_at.slice(0, 10)).getTime() >= start;
+      }
+
+      //Filter if both values not null
+      return (
+        new Date(val.update_at.slice(0, 10)).getTime() >= start &&
+        new Date(val.update_at.slice(0, 10)).getTime() <= end
+      );
+    });
+
+    console.log(result3);
+
+    setFilteredData(result);
+    setFilteredSold(result2);
+    setFilteredProfit(result3);
+    setFilteredCost(result3);
+    setFilteredRevenue(result3);
+    var xz = 0;
+    var xy = 0;
+    var xx = 0;
+    var z = filteredProfit.map((x) => {
+      xz += x.total_profit;
+    });
+    var y = filteredProfit.map((x) => {
+      xy += x.total_cost;
+    });
+    var x = filteredProfit.map((x) => {
+      xx += x.revenue;
+    });
+    setFilteredProfit2(xz);
+    setFilteredCost2(xy);
+    setFilteredRevenue2(xx);
+    setDateFilter(true);
     setPage(1);
   };
 
@@ -101,6 +152,9 @@ function Report(props) {
           console.log(profit);
         });
 
+        setDataMoney(respond.data);
+        console.log(respond.data);
+
         setTotalProfit(profit);
         setTotalRevenue(revenue);
         setTotalCost(cost);
@@ -124,6 +178,15 @@ function Report(props) {
   }, [data]);
 
   useEffect(() => {
+    Axios.get(API_URL + `/products/sold`)
+      .then((respond) => {
+        setSold(respond.data);
+        console.log(respond.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
     //Set pagination
     const startIndex = 0 + itemPerPage * (page - 1);
     setIndexStartItem(startIndex);
@@ -132,9 +195,28 @@ function Report(props) {
     console.log("current page:", page);
   }, [page]);
 
+  //Pagination control
+  const active = page;
+  const items = [];
+  const itemPerPage = 5;
+  const showData = dateFilter ? filteredData : data;
+  const endPageNumber = Math.ceil(showData.length / itemPerPage);
+  for (let number = 1; number <= endPageNumber; number++) {
+    items.push(
+      <Pagination.Item
+        onClick={() => setPage(number)}
+        key={number}
+        active={number === active}
+      >
+        {number}
+      </Pagination.Item>
+    );
+  }
+
   const renderReport = () => {
-    console.log(data);
-    return data
+    const showData = dateFilter ? filteredData : data;
+    console.log(showData);
+    return showData
       .slice(indexStartItem, indexStartItem + itemPerPage)
       .map((data, no) => {
         var createDate = new Date(data.create_at).toLocaleDateString("id");
@@ -142,7 +224,7 @@ function Report(props) {
         var updateDate = new Date(data.update_at).toLocaleDateString("id");
         var updateTime = new Date(data.update_at).toLocaleTimeString("id");
         var noID = no + 1 + itemPerPage * (page - 1);
-        console.log(createDate);
+
         return (
           <tr key={data.id}>
             <td>{noID}</td>
@@ -158,16 +240,30 @@ function Report(props) {
   };
 
   const renderReportMostSold = () => {
-    console.log(data);
-    return sold.slice(0, 3).map((sold, no) => {
-      console.log();
+    const showData2 = dateFilter ? filteredSold : sold;
+    console.log(showData2);
+    return showData2.slice(0, 3).map((sold, no) => {
+      console.log(sold);
       return (
         <tr key={{}}>
           <td>{sold.product_name}</td>
-          <td>{sold.jumlah}</td>
+          <td>{sold.jumlah || sold.qty}</td>
         </tr>
       );
     });
+  };
+
+  const theProfit = () => {
+    const showData = dateFilter ? filteredProfit2 : totalProfit;
+    return showData;
+  };
+  const theCost = () => {
+    const showData = dateFilter ? filteredCost2 : totalCost;
+    return showData;
+  };
+  const theRevenue = () => {
+    const showData = dateFilter ? filteredRevenue2 : totalRevenue;
+    return showData;
   };
 
   return (
@@ -207,7 +303,7 @@ function Report(props) {
                       marginTop: "10%",
                     }}
                   >
-                    <h4>{formatter.format(totalProfit)}</h4>
+                    <h4>{formatter.format(theProfit())}</h4>
                   </div>
                 </div>
                 <div>
@@ -219,13 +315,13 @@ function Report(props) {
                     <div>
                       <h5 className="color-text">Revenue</h5>
                     </div>
-                    <div>{formatter.format(totalRevenue)}</div>
+                    <div>{formatter.format(theRevenue())}</div>
                   </div>
                   <div>
                     <div>
                       <h5 className="color-text">Cost</h5>
                     </div>
-                    <div>{formatter.format(totalCost)}</div>
+                    <div>{formatter.format(theCost())}</div>
                   </div>
                 </div>
               </div>
